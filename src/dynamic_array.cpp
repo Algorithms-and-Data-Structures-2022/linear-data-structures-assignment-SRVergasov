@@ -12,15 +12,27 @@ namespace assignment {
       throw std::invalid_argument("capacity is not positive");
     }
 
-    // Write your code here ...
+    capacity_ = capacity;
+    data_ = new int[capacity_];
+    for (int i = 0; i < capacity; i++) {
+      data_[i] = 0;
+    }
   }
 
   DynamicArray::~DynamicArray() {
-    // Write your code here ...
+    delete[] data_;
+    data_ = nullptr;
+    capacity_ = 0;
+    size_ = 0;
   }
 
   void DynamicArray::Add(int value) {
-    // Write your code here ...
+    if (size_ < capacity_) {
+      data_[size_++] = value;
+    } else {
+      Resize(capacity_ + kCapacityGrowthCoefficient);
+      data_[size_++] = value;
+    }
   }
 
   bool DynamicArray::Insert(int index, int value) {
@@ -69,8 +81,21 @@ namespace assignment {
   }
 
   bool DynamicArray::Resize(int new_capacity) {
-    // Write your code here ...
-    return false;
+    if (new_capacity <= capacity_) {
+      return false;
+    }
+
+    int* newData = new int[new_capacity];
+    for (int i = 0; i < size_; i++) {
+      newData[i] = data_[i];
+    }
+
+    delete[] data_;
+    data_ = newData;
+    newData = nullptr;
+    capacity_ = new_capacity;
+
+    return true;
   }
 
   // ДЛЯ ТЕСТИРОВАНИЯ
